@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: KKDAY Product Service API Document
+servers:
+  - url: http://product-service.docker.kkday.com:8000/api/v1
+  - url: http://product-service.docker.kkday.com/api/v1
+  - url: https://api-product.sit.kkday.com/api/v1
+security:
+  - authId: []
+  - authSignature: []
+  - requestId: []
+paths:
+  /products/search:
+    get:
+      summary: 商品管理搜尋功能
+      tags:
+        - Draft-Product
+      parameters:
+        - name: perpage
+          in: query
+          description: 一頁幾筆(分頁)
+          schema:
+            type: number
+          example: 10
+        - name: page
+          in: query
+          description: 第幾頁(分頁)
+          schema:
+            type: number
+          example: 1
+        - name: sort
+          in: query
+          description: 排序方式
+          schema:
+            type: string
+            enum:
+              - created_at-desc
+              - created_at-asc
+              - published_at-desc
+              - published_at-asc
+              - updated_at-desc
+              - updated_at-acs
+          example: created_at-desc
+        - name: supplier_oid
+          in: query
+          description: 供應商ID
+          schema:
+            type: number
+          example: 1
+        - name: country_code
+          in: query
+          description: 國家代碼
+          schema:
+            type: string
+          example: A01-001
+        - name: city_code
+          in: query
+          description: 城市代碼
+          schema:
+            type: string
+          example: A01-001-00001
+        - name: owner_uuid
+          in: query
+          description: 商品負責人(BD) uuid
+          schema:
+            type: string
+            format: uuid
+          example: xxxx-xxxx-xxxx-xxxx
+        - name: product_active
+          in: query
+          description: 商品上架狀態(請填入1 or 0)
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+          example: 1
+        - name: prod_mid
+          in: query
+          description: 商品mid
+          schema:
+            type: number
+          example: 30001
+        - name: prod_oid
+          in: query
+          description: 商品oid
+          schema:
+            type: number
+          example: 1
+        - name: fuzzy_prod_oid
+          in: query
+          description: 模糊搜尋商品oid
+          schema:
+            type: number
+          example: 1
+        - name: category
+          in: query
+          description: 商品大分類
+          schema:
+            type: string
+          example: M01
+        - name: bd_tag
+          in: query
+          description: BD Tag
+          schema:
+            type: string
+          example: '0001'
+        - name: workflow_status
+          in: query
+          description: 發布狀態(array)
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - EDIT
+                - FINALIZED
+                - WAIT
+                - PROCESSING
+                - PUBLISHED
+                - PUBLISHED_FAIL
+          example: null
+        - name: product_name
+          in: query
+          description: 商品名稱(模糊搜尋)
+          schema:
+            type: string
+          example: wifi
+        - name: is_marketplace
+          in: query
+          description: 是否為 marketplace 商品(請填入1 or 0)
+          required: true
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+          example: 1
+        - name: created_platform
+          in: query
+          description: 建立平台
+          schema:
+            type: string
+            enum:
+              - be2
+              - pms
+              - scm
+              - b2b
+              - b2s
+          example: be2
+        - name: is_mine
+          in: query
+          description: 搜尋只可編輯或不可編輯(by x-auth-id)的商品資料(1:只搜尋可編輯， 0:只搜尋不可編輯)
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+          example: 1
+        - name: is_draft_only
+          in: query
+          description: 搜尋發佈或是未發佈的商品 (請填入1 or 0)
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+          example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                data:
+                  - prod_oid: 14
+                    prod_mid: 30846
+                    name: 商品:wifi
+                    packages:
+                      - pkg_oid: 31
+                        name: 高鐵自由座
+                    master_lang: zh-tw
+                    workflow_status: EDIT
+                    published_at: null
+                    scheduled_publish_at: '2020-04-15 02:25:07'
+                    submitted_at: '2019-11-04 02:25:07'
+                    product_config:
+                      is_active: true
+                      is_global_search: true
+                      allow_modfiy_platform: be2
+                    is_marketplace: false
+                    is_allowed_to_modify: true
+                    created_at: '2019-11-04 02:22:36'
+                    updated_at: '2019-11-04 02:25:07'
+                    created_by: eec22cb5-d2cd-4541-8336-f4c76b78cf31
+                    updated_by: eec22cb5-d2cd-4541-8336-f4c76b78cf31
+                    submitted_by: eec22cb5-d2cd-4541-8336-f4c76b78cf31
+                meta:
+                  pagination:
+                    total: 1
+                    perpage: 10
+                    current_page: 1
+                    total_pages: 1
+                  status: '100000'
+                  desc: 成功
