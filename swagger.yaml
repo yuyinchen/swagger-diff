@@ -124,6 +124,7 @@ paths:
         - name: product_name
           in: query
           description: 商品名稱(模糊搜尋)
+          required: true
           schema:
             type: string
           example: wifi
